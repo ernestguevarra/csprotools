@@ -1,0 +1,573 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=2cm]{geometry}
+\usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{unicode=true,
+            pdftitle={Calculating anthropometric measurement flags in CSPro},
+            colorlinks=true,
+            linkcolor=blue,
+            citecolor=blue,
+            urlcolor=blue,
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{natbib}
+\bibliographystyle{plainnat}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{Calculating anthropometric measurement flags in CSPro}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{}
+    \preauthor{}\postauthor{}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{20 July 2018}
+
+\usepackage{float} 
+\usepackage{setspace}
+\usepackage[utf8]{inputenc}
+\onehalfspacing
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage[table]{xcolor}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{example}{Example}
+\theoremstyle{definition}
+\newtheorem{exercise}{Exercise}
+\theoremstyle{remark}
+\newtheorem*{remark}{Remark}
+\newtheorem*{solution}{Solution}
+\begin{document}
+\maketitle
+
+\hypertarget{calculating-z-scores-within-cspro}{%
+\section{Calculating z-scores within
+CSPro}\label{calculating-z-scores-within-cspro}}
+
+CSPro logic supports the following mathematical operators:
+
+\rowcolors{2}{gray!6}{white}\begin{table}[H]
+
+\caption{\label{tab:mathoperators}Mathematical operations supported by CSPro}
+\centering
+\fontsize{12}{14}\selectfont
+\begin{tabular}[t]{rr}
+\hiderowcolors
+\toprule
+\textbf{Operations} & \textbf{Operands}\\
+\midrule
+\showrowcolors
+Addition & +\\
+Subtraction & -\\
+Multiplication & *\\
+Division & /\\
+Modulo & \%\\
+Exponentiation & \textasciicircum{}\\
+\bottomrule
+\end{tabular}
+\end{table}\rowcolors{2}{white}{white}
+
+Using these operations, we can look into a way to flag weight and height
+measurements in CSPro. We are trying out an approach developed by Robert
+Johnston
+(\href{mailto:rfjohnstonunicef@gmail.com}{\nolinkurl{rfjohnstonunicef@gmail.com}})\footnote{see
+  \url{https://github.com/RobertJohnston/SMART-Questionnaire}} from
+UNICEF that calculates the corresponding value for the anthropometric
+measurement being standardised at a specific standard deviation which in
+context of a flag would be set at the the upper and lower bounds used in
+the flagging criteria. The WHO flagging criteria are used. Below we show
+the formula used for these calculations.
+
+\newpage
+
+\hypertarget{calculate-lower-and-upper-height-measurement-given-a-childs-age-and-sex-that-will-produce-a-sd-above-and-below-6-sd-and--6-sd-respectively}{%
+\subsection{Calculate lower and upper height measurement given a child's
+age and sex that will produce a SD above and below +6 SD and -6 SD
+respectively}\label{calculate-lower-and-upper-height-measurement-given-a-childs-age-and-sex-that-will-produce-a-sd-above-and-below-6-sd-and--6-sd-respectively}}
+
+This is to calculate corresponding flags for height measurements given
+the age and sex of the child. The idea here will be that the height will
+be checked by calculating the height that would give an SD greater than
++6 or lower than -6 using the child's age and sex.
+
+The general formula is:
+
+\[\begin{aligned}
+height_\text{lower for boys} ~ = ~ & 0.000000379386 ~ \times ~ age ^ 5 ~ - ~ 0.000069515524 ~ \times ~ age ^ 4 \\
+& + ~ 0.004909805 ~ \times ~ age ^ 3 ~ - ~ 0.168908042 ~ \times ~ age ^ 2 \\
+& + ~ 3.266127182 ~ \times ~ age ~ + ~ 39.95107423 \\
+\\
+height_\text{upper for boys} ~ = ~ & 0.000000477257 ~ \times ~ age ^ 5 ~ - ~ 0.000080053304 ~ \times ~ age ^ 4 \\
+& + ~ 0.005071378 ~ \times ~ age ^ 3 ~ - ~ 0.158048367 ~ \times ~ age ^ 2 \\
+& + ~ 3.584968875 ~ \times ~ age ~ + ~ 63.13173807 \\
+\\
+height_\text{lower for girls} ~ = ~ & 0.000000308918 ~ \times ~ age ^ 5 ~ - ~ 0.000056212972 ~ \times ~ age ^ 4 \\
+& + ~ 0.003932757 ~ \times ~ age ^ 3 ~ - ~ 0.135180355 ~ \times ~ age ^ 2 \\
+& + ~ 2.789665701 ~ \times ~ age ~ + ~ 39.23327346 \\
+\\
+height_\text{upper for girls} ~ = ~ & 0.000000371919 ~ \times ~ age ^ 5 ~ - ~ 0.000065134503 ~ \times ~ age ^ 4 \\
+& + ~ 0.004358773 ~ \times ~ age ^ 3 ~ - ~ 0.145396571 ~ \times ~ age ^ 2 \\
+& + ~ 3.553078292 ~ \times ~ age ~ + ~ 62.01230832 \\
+\\
+where: & \\
+\\
+age & ~ = ~ \text{age of child} \\
+height_\text{lower for boys} & ~ = ~ \text{expected height for boys for a -6SD} \\
+height_\text{upper for boys} & ~ = ~ \text{expected height for boys for a +6SD} \\
+height_\text{lower for girls} & ~ = ~ \text{expected height for girls for a -6SD} \\
+height_\text{upper for girls} & ~ = ~ \text{expected height for girls for a +6SD}
+\end{aligned}\]
+
+~
+
+In CSPro, these calculations can be approached similarly. In the
+following examples, we assume that the dataset captured in CSPro has the
+following variables:
+
+\begin{table}[H]
+\centering\begingroup\fontsize{12}{14}\selectfont
+\rowcolors{2}{gray!6}{white}
+
+\begin{tabular}{ll}
+\hiderowcolors
+\toprule
+\textbf{Variables} & \textbf{Definitions}\\
+\midrule
+\showrowcolors
+cage & Age of child in months\\
+csex & Sex of child\\
+height & Height of child\\
+\bottomrule
+\end{tabular}
+\rowcolors{2}{white}{white}\endgroup{}
+\end{table}
+
+~
+
+The possible steps/code in CSPro for creating logic for flagging HAZ can
+be:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{/}\ErrorTok{/}\StringTok{ }\NormalTok{Declare variables}
+\NormalTok{numeric aNumber;}
+
+\OperatorTok{/}\ErrorTok{/}\StringTok{ }\NormalTok{Create logic variables }\ControlFlowTok{for}\NormalTok{ each of the HAZ flags}
+\NormalTok{numeric hazLowerBoys;}
+\NormalTok{hazLowerBoys =}\StringTok{ }\FloatTok{0.000000379386} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{5} \OperatorTok{-}\StringTok{ }\FloatTok{0.000069515524} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{4} 
+               \OperatorTok{+}\StringTok{ }\FloatTok{0.004909805} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{3} \OperatorTok{-}\StringTok{ }\FloatTok{0.168908042} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{2} 
+               \OperatorTok{+}\StringTok{ }\FloatTok{3.266127182} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{+}\StringTok{ }\FloatTok{39.95107423}
+
+\NormalTok{numeric hazUpperBoys;}
+\NormalTok{hazUpperBoys =}\StringTok{ }\FloatTok{0.000000477257} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{5} \OperatorTok{-}\StringTok{ }\FloatTok{0.000080053304} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{4} 
+               \OperatorTok{+}\StringTok{ }\FloatTok{0.005071378} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{3} \OperatorTok{-}\StringTok{ }\FloatTok{0.158048367} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{2} 
+               \OperatorTok{+}\StringTok{ }\FloatTok{3.584968875} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{+}\StringTok{ }\FloatTok{63.13173807}
+
+\NormalTok{numeric hazLowerGirls;}
+\NormalTok{hazLowerGirls =}\StringTok{ }\FloatTok{0.000000308918} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{5} \OperatorTok{-}\StringTok{ }\FloatTok{0.000056212972} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{4}
+                \OperatorTok{+}\StringTok{ }\FloatTok{0.003932757} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{3} \OperatorTok{-}\StringTok{ }\FloatTok{0.135180355} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{2}
+                \OperatorTok{+}\StringTok{ }\FloatTok{2.789665701} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{+}\StringTok{ }\FloatTok{39.23327346}
+
+\NormalTok{numeric hazUpperGirls;}
+\NormalTok{hazUpperGirs =}\StringTok{ }\FloatTok{0.000000371919} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{5} \OperatorTok{-}\StringTok{ }\FloatTok{0.000065134503} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{4}
+               \OperatorTok{+}\StringTok{ }\FloatTok{0.004358773} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{3} \OperatorTok{-}\StringTok{ }\FloatTok{0.145396571} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{2}
+               \OperatorTok{+}\StringTok{ }\FloatTok{3.553078292} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{+}\StringTok{ }\FloatTok{62.01230832}
+               
+\OperatorTok{/}\ErrorTok{/}\StringTok{ }\NormalTok{Add logic to flag height measurements }\OperatorTok{-}\StringTok{ }\NormalTok{boys}
+\ControlFlowTok{if}\NormalTok{ csex }\OperatorTok{<}\ErrorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{ and height }\OperatorTok{>}\StringTok{ }\NormalTok{hazUpperBoys or height }\OperatorTok{<}\StringTok{ }\NormalTok{hazLowerBoys then}
+  \KeywordTok{warning}\NormalTok{(}\StringTok{"Height measurement beyond expected value for child's age and sex"}\NormalTok{,}
+\NormalTok{          height)}
+          \KeywordTok{select}\NormalTok{(}\StringTok{"Repeat height measurement"}\NormalTok{, height,}
+                 \StringTok{"Ignore warning"}\NormalTok{, continue);}
+\NormalTok{endif;}
+
+\OperatorTok{/}\ErrorTok{/}\StringTok{ }\NormalTok{Add logic to flag height measurements }\OperatorTok{-}\StringTok{ }\NormalTok{girls}
+\ControlFlowTok{if}\NormalTok{ csex }\OperatorTok{<}\ErrorTok{>}\StringTok{ }\DecValTok{2}\NormalTok{ and height }\OperatorTok{>}\StringTok{ }\NormalTok{hazUpperGirls or height }\OperatorTok{<}\StringTok{ }\NormalTok{hazLowerGirls then}
+  \KeywordTok{warning}\NormalTok{(}\StringTok{"Height measurement beyond expected value for child's age and sex"}\NormalTok{,}
+\NormalTok{          height)}
+          \KeywordTok{select}\NormalTok{(}\StringTok{"Repeat height measurement"}\NormalTok{, height,}
+                 \StringTok{"Ignore warning"}\NormalTok{, continue);}
+\NormalTok{endif;}
+\end{Highlighting}
+\end{Shaded}
+
+\newpage
+
+\hypertarget{calculate-lower-and-upper-weight-measurement-given-a-childs-age-and-sex-that-will-produce-a-sd-above-and-below-5-sd-and--6-sd-respectively}{%
+\subsection{Calculate lower and upper weight measurement given a child's
+age and sex that will produce a SD above and below +5 SD and -6 SD
+respectively}\label{calculate-lower-and-upper-weight-measurement-given-a-childs-age-and-sex-that-will-produce-a-sd-above-and-below-5-sd-and--6-sd-respectively}}
+
+This is to calculate corresponding flags for weight measurements given
+the age and sex of the child. The idea here will be that the weight will
+be checked by calculating the weight that would give an SD greater than
++5 or lower than -6 using the child's age and sex.
+
+The general formula is:
+
+\[\begin{aligned}
+weight_\text{lower for boys} ~ = ~ & 0.000000095420 ~ \times ~ age ^ 5 ~ - ~ 0.00001662831 ~ \times ~ age ^ 4 \\
+& + ~ 0.001091416 ~ \times ~ age ^ 3 ~ - ~ 0.033880085 ~ \times ~ age ^ 2 \\
+& + ~ 0.562601613 ~ \times ~ age ~ + ~ 1.139474257 \\
+\\
+weight_\text{upper for boys} ~ = ~ &  0.000000234816 ~ \times ~ age ^ 5 ~ - ~ 0.000039531734 ~ \times ~ age ^ 4 \\
+& + ~ 0.002496579 ~ \times ~ age ^ 3 ~ - ~ 0.072781678 ~ \times ~ age ^ 2 \\
+& + ~ 1.351053186 ~ \times ~ age ~ + ~ 6.972621013 \\
+\\
+weight_\text{lower for girls} ~ = ~ & 0.000000083218 ~ \times ~ age ^ 5 ~ - ~ 0.000013843176 ~ \times ~ age ^ 4 \\
+& + ~ 0.000861019 ~ \times ~ age ^ 3 ~ - ~ 0.025646557 ~ \times ~ age ^ 2 \\
+& + ~ 0.450277222 ~ \times ~ age ~ + ~ 1.111128346 \\
+\\
+weight_\text{upper for girls} ~ = ~ & 0.000000197736 ~ \times ~ age ^ 5 ~ - ~ 0.000035478810 ~ \times ~ age ^ 4 \\
+& + ~ 0.002404164 ~ \times ~ age ^ 3 ~ - ~ 0.074112047 ~ \times ~ age ^ 2 \\
+& + ~ 1.434496211 ~ \times ~ age ~ + ~ 6.482817802 \\
+\\
+where: & \\
+\\
+age & ~ = ~ \text{age of child} \\
+weight_\text{lower for boys} & ~ = ~ \text{expected weight for boys for a -6SD} \\
+weight_\text{upper for boys} & ~ = ~ \text{expected weight for boys for a +5SD} \\
+weight_\text{lower for girls} & ~ = ~ \text{expected weight for girls for a -6SD} \\
+weight_\text{upper for girls} & ~ = ~ \text{expected weight for girls for a +5SD}
+\end{aligned}\]
+
+~
+
+In CSPro, these calculations can be approached similarly. In the
+following examples, we assume that the dataset captured in CSPro has the
+following variables:
+
+\begin{table}[H]
+\centering\begingroup\fontsize{12}{14}\selectfont
+\rowcolors{2}{gray!6}{white}
+
+\begin{tabular}{ll}
+\hiderowcolors
+\toprule
+\textbf{Variables} & \textbf{Definitions}\\
+\midrule
+\showrowcolors
+cage & Age of child in months\\
+csex & Sex of child\\
+weight & Weight of child\\
+\bottomrule
+\end{tabular}
+\rowcolors{2}{white}{white}\endgroup{}
+\end{table}
+
+~
+
+The possible steps/code in CSPro for creating logic for flagging WAZ can
+be:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{/}\ErrorTok{/}\StringTok{ }\NormalTok{Declare variables}
+\NormalTok{numeric aNumber;}
+
+\OperatorTok{/}\ErrorTok{/}\StringTok{ }\NormalTok{Create logic variables }\ControlFlowTok{for}\NormalTok{ each of the WAZ flags}
+\NormalTok{numeric wazLowerBoys;}
+\NormalTok{wazLowerBoys =}\StringTok{ }\FloatTok{0.000000095420} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{5} \OperatorTok{-}\StringTok{ }\FloatTok{0.00001662831} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{4} 
+               \OperatorTok{+}\StringTok{ }\FloatTok{0.001091416} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{3} \OperatorTok{-}\StringTok{ }\FloatTok{0.033880085} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{^}\StringTok{ }\DecValTok{2} 
+               \OperatorTok{+}\StringTok{ }\FloatTok{0.562601613} \OperatorTok{*}\StringTok{ }\NormalTok{cage }\OperatorTok{+}\StringTok{ }\FloatTok{1.139474257}
+
+\NormalTok{numeric wazUpperBoys;}
+\NormalTok{wazUpperBoys =}\StringTok{ }\FloatTok{0.000000234816} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{^}\StringTok{ }\DecValTok{5} \OperatorTok{-}\StringTok{ }\FloatTok{0.000039531734} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{^}\StringTok{ }\DecValTok{4}
+               \OperatorTok{+}\StringTok{ }\FloatTok{0.002496579} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{^}\StringTok{ }\DecValTok{3} \OperatorTok{-}\StringTok{ }\FloatTok{0.072781678} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{^}\StringTok{ }\DecValTok{2}
+               \OperatorTok{+}\StringTok{ }\FloatTok{1.351053186} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{+}\StringTok{ }\FloatTok{6.972621013}
+
+\NormalTok{numeric wazLowerGirls;}
+\NormalTok{wazLowerGirls =}\StringTok{ }\FloatTok{0.000000083218} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{^}\StringTok{ }\DecValTok{5} \OperatorTok{-}\StringTok{ }\FloatTok{0.000013843176} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{^}\StringTok{ }\DecValTok{4}
+                \OperatorTok{+}\StringTok{ }\FloatTok{0.000861019} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{^}\StringTok{ }\DecValTok{3} \OperatorTok{-}\StringTok{ }\FloatTok{0.025646557} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{^}\StringTok{ }\DecValTok{2}
+                \OperatorTok{+}\StringTok{ }\FloatTok{0.450277222} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{+}\StringTok{ }\FloatTok{1.111128346}
+
+\NormalTok{numeric wazUpperGirls;}
+\NormalTok{wazUpperGirls =}\StringTok{ }\FloatTok{0.000000197736} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{^}\StringTok{ }\DecValTok{5} \OperatorTok{-}\StringTok{ }\FloatTok{0.000035478810} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{^}\StringTok{ }\DecValTok{4}
+               \OperatorTok{+}\StringTok{ }\FloatTok{0.002404164} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{^}\StringTok{ }\DecValTok{3} \OperatorTok{-}\StringTok{ }\FloatTok{0.074112047} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{^}\StringTok{ }\DecValTok{2}
+               \OperatorTok{+}\StringTok{ }\FloatTok{1.434496211} \OperatorTok{*}\StringTok{ }\NormalTok{age }\OperatorTok{+}\StringTok{ }\FloatTok{6.482817802}
+               
+\OperatorTok{/}\ErrorTok{/}\StringTok{ }\NormalTok{Add logic to flag weight measurements }\OperatorTok{-}\StringTok{ }\NormalTok{boys}
+\ControlFlowTok{if}\NormalTok{ csex }\OperatorTok{<}\ErrorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{ and weight }\OperatorTok{>}\StringTok{ }\NormalTok{wazUpperBoys or weight }\OperatorTok{<}\StringTok{ }\NormalTok{wazLowerBoys then}
+  \KeywordTok{warning}\NormalTok{(}\StringTok{"Weight measurement beyond expected value for child's age and sex"}\NormalTok{,}
+\NormalTok{          weight)}
+          \KeywordTok{select}\NormalTok{(}\StringTok{"Repeat weight measurement"}\NormalTok{, weight,}
+                 \StringTok{"Ignore warning"}\NormalTok{, continue);}
+\NormalTok{endif;}
+
+\OperatorTok{/}\ErrorTok{/}\StringTok{ }\NormalTok{Add logic to flag weight measurements }\OperatorTok{-}\StringTok{ }\NormalTok{girls}
+\ControlFlowTok{if}\NormalTok{ csex }\OperatorTok{<}\ErrorTok{>}\StringTok{ }\DecValTok{2}\NormalTok{ and weight }\OperatorTok{>}\StringTok{ }\NormalTok{wazUpperGirls or weight }\OperatorTok{<}\StringTok{ }\NormalTok{wazLowerGirls then}
+  \KeywordTok{warning}\NormalTok{(}\StringTok{"Weight measurement beyond expected value for child's age and sex"}\NormalTok{,}
+\NormalTok{          weight)}
+          \KeywordTok{select}\NormalTok{(}\StringTok{"Repeat weight measurement"}\NormalTok{, weight,}
+                 \StringTok{"Ignore warning"}\NormalTok{, continue);}
+\NormalTok{endif;}
+\end{Highlighting}
+\end{Shaded}
+
+\newpage
+
+\hypertarget{calculate-lower-and-upper-height-measurement-given-a-childs-weight-and-sex-that-will-produce-a-sd-above-and-below-5-sd-and--5-sd-respectively}{%
+\subsection{Calculate lower and upper height measurement given a child's
+weight and sex that will produce a SD above and below +5 SD and -5 SD
+respectively}\label{calculate-lower-and-upper-height-measurement-given-a-childs-weight-and-sex-that-will-produce-a-sd-above-and-below-5-sd-and--5-sd-respectively}}
+
+This is to calculate corresponding flags for height measurements given
+the weight and sex of the child. The idea here will be that the height
+will be checked by calculating the height that would give an SD greater
+than +5 or lower than -5 using the child's weight and sex.
+
+The general formula is:
+
+\[\begin{aligned}
+whz_\text{lower for boys} ~ = ~ & 0.002568778 ~ \times ~ weight ^ 5 ~ - ~ 0.087078285 ~ \times ~ weight ^ 4 \\
+& + ~ 1.083870039 ~ \times ~ weight ^ 3 ~ - ~ 6.017158294 ~ \times ~ weight ^ 2 \\
+& + ~ 20.69094143 ~ \times ~ weight ~ + ~ 24.23997191 \\
+\\
+whz_\text{upper for boys} ~ = ~ &  0.000039423 ~ \times ~ weight ^ 5 ~ - ~ 0.003300406 ~ \times ~ weight ^ 4 \\
+& + ~ 0.100344392 ~ \times ~ weight ^ 3 ~ - ~ 1.359686971 ~ \times ~ weight ^ 2 \\
+& + ~ 10.87955385 ~ \times ~ weight ~ + ~ 18.21716746 \\
+\\
+whz_\text{lower for girls} ~ = ~ & 0.001848563 ~ \times ~ weight ^ 5 ~ - ~ 0.0606399 ~ \times ~ weight ^ 4 \\
+& + ~ 0.7185497 ~ \times ~ weight ^ 3 ~ - ~ 3.7764632 ~ \times ~ weight ^ 2 \\
+& + ~ 15.4720170 ~ \times ~ weight ~ + ~ 28.0948931 \\
+\\
+whz_\text{upper for girls} ~ = ~ & 0.00002434 ~ \times ~ weight ^ 5 ~ - ~ 0.00197858 ~ \times ~ weight ^ 4 \\
+& + ~ 0.05716011 ~ \times ~ weight ^ 3 ~ - ~ 0.71815707 ~ \times ~ weight ^ 2 \\
+& + ~ 6.61322135 ~ \times ~ weight ~ + ~ 27.77925292 \\
+\\
+where: & \\
+\\
+weight & ~ = ~ \text{weight of child} \\
+whz_\text{lower for boys} & ~ = ~ \text{expected height for boys for a -5SD} \\
+whz_\text{upper for boys} & ~ = ~ \text{expected height for boys for a +5SD} \\
+whz_\text{lower for girls} & ~ = ~ \text{expected height for girls for a -5SD} \\
+whz_\text{upper for girls} & ~ = ~ \text{expected height for girls for a +5SD}
+\end{aligned}\]
+
+~
+
+In CSPro, these calculations can be approached similarly. In the
+following examples, we assume that the dataset captured in CSPro has the
+following variables:
+
+\begin{table}[H]
+\centering\begingroup\fontsize{12}{14}\selectfont
+\rowcolors{2}{gray!6}{white}
+
+\begin{tabular}{ll}
+\hiderowcolors
+\toprule
+\textbf{Variables} & \textbf{Definitions}\\
+\midrule
+\showrowcolors
+csex & Sex of child\\
+weight & Weight of child\\
+height & Height of child\\
+\bottomrule
+\end{tabular}
+\rowcolors{2}{white}{white}\endgroup{}
+\end{table}
+
+~
+
+The possible steps/code in CSPro for creating logic for flagging WHZ can
+be:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\OperatorTok{/}\ErrorTok{/}\StringTok{ }\NormalTok{Declare variables}
+\NormalTok{numeric aNumber;}
+
+\OperatorTok{/}\ErrorTok{/}\StringTok{ }\NormalTok{Create logic variables }\ControlFlowTok{for}\NormalTok{ each of the WAZ flags}
+\NormalTok{numeric whzLowerBoys;}
+\NormalTok{whzLowerBoys =}\StringTok{ }\FloatTok{0.002568778} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{5} \OperatorTok{-}\StringTok{ }\FloatTok{0.087078285} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{4}
+               \OperatorTok{+}\StringTok{ }\FloatTok{1.083870039} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{3} \OperatorTok{-}\StringTok{ }\FloatTok{6.017158294} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{2}
+               \OperatorTok{+}\StringTok{ }\FloatTok{20.69094143} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{+}\StringTok{ }\FloatTok{24.23997191}
+
+\NormalTok{numeric whzUpperBoys;}
+\NormalTok{whzUpperBoys =}\StringTok{ }\FloatTok{0.000039423} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{5} \OperatorTok{-}\StringTok{ }\FloatTok{0.003300406} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{4}
+               \OperatorTok{+}\StringTok{ }\FloatTok{0.100344392} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{3} \OperatorTok{-}\StringTok{ }\FloatTok{1.359686971} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{2}
+               \OperatorTok{+}\StringTok{ }\FloatTok{10.87955385} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{+}\StringTok{ }\FloatTok{18.21716746}
+
+\NormalTok{numeric whzLowerGirls;}
+\NormalTok{whzLowerGirls =}\StringTok{ }\FloatTok{0.001848563} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{5} \OperatorTok{-}\StringTok{ }\FloatTok{0.0606399} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{4}
+                \OperatorTok{+}\StringTok{ }\FloatTok{0.7185497} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{3} \OperatorTok{-}\StringTok{ }\FloatTok{3.7764632} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{2}
+                \OperatorTok{+}\StringTok{ }\FloatTok{15.4720170} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{+}\StringTok{ }\FloatTok{28.0948931}
+
+\NormalTok{numeric whzUpperGirls;}
+\NormalTok{whzUpperGirls =}\StringTok{ }\FloatTok{0.00002434} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{5} \OperatorTok{-}\StringTok{ }\FloatTok{0.00197858} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{4}
+                \OperatorTok{+}\StringTok{ }\FloatTok{0.05716011} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{3} \OperatorTok{-}\StringTok{ }\FloatTok{0.71815707} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{^}\StringTok{ }\DecValTok{2}
+                \OperatorTok{+}\StringTok{ }\FloatTok{6.61322135} \OperatorTok{*}\StringTok{ }\NormalTok{weight }\OperatorTok{+}\StringTok{ }\FloatTok{27.77925292}
+               
+\OperatorTok{/}\ErrorTok{/}\StringTok{ }\NormalTok{Add logic to flag height measurements }\OperatorTok{-}\StringTok{ }\NormalTok{boys}
+\ControlFlowTok{if}\NormalTok{ csex }\OperatorTok{<}\ErrorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{ and height }\OperatorTok{>}\StringTok{ }\NormalTok{whzUpperBoys or height }\OperatorTok{<}\StringTok{ }\NormalTok{whzLowerBoys then}
+  \KeywordTok{warning}\NormalTok{(}\StringTok{"Height measurement beyond expected value for child's weight and sex"}\NormalTok{,}
+\NormalTok{          height)}
+          \KeywordTok{select}\NormalTok{(}\StringTok{"Repeat height measurement"}\NormalTok{, height,}
+                 \StringTok{"Ignore warning"}\NormalTok{, continue);}
+\NormalTok{endif;}
+
+\OperatorTok{/}\ErrorTok{/}\StringTok{ }\NormalTok{Add logic to flag height measurements }\OperatorTok{-}\StringTok{ }\NormalTok{girls}
+\ControlFlowTok{if}\NormalTok{ csex }\OperatorTok{<}\ErrorTok{>}\StringTok{ }\DecValTok{2}\NormalTok{ and height }\OperatorTok{>}\StringTok{ }\NormalTok{whzUpperGirls or height }\OperatorTok{<}\StringTok{ }\NormalTok{whzLowerGirls then}
+  \KeywordTok{warning}\NormalTok{(}\StringTok{"Height measurement beyond expected value for child's age and sex"}\NormalTok{,}
+\NormalTok{          height)}
+          \KeywordTok{select}\NormalTok{(}\StringTok{"Repeat height measurement"}\NormalTok{, height,}
+                 \StringTok{"Ignore warning"}\NormalTok{, continue);}
+\NormalTok{endif;}
+\end{Highlighting}
+\end{Shaded}
+
+\newpage
+
+\hypertarget{determining-sam-children-by-whz}{%
+\subsection{Determining SAM children by
+WHZ}\label{determining-sam-children-by-whz}}
+
+This approach can also be used to identify children as SAM by WHZ by
+calculating height of child given weight that will give an SD of -3.
+
+The general formula is:
+
+\[\begin{aligned}
+whz_\text{-3SD boys} ~ = ~ & 0.000995821 ~ \times ~ weight ^ 5 ~ - ~ 0.041179737 ~ \times ~ weight ^ 4 \\
+& + ~ 0.622839074 ~ \times ~ weight ^ 3 ~ - ~ 4.192765025 ~ \times ~ weight ^ 2 \\
+& + ~ 17.49551065 ~ \times ~ weight ~ + ~ 23.63868321 \\
+\\
+whz_\text{-3SD for girls} ~ = ~ &  0.000754341 ~ \times ~ weight ^ 5 ~ - ~ 0.0299748 ~ \times ~ weight ^ 4 \\
+& + ~ 0.4284523 ~ \times ~ weight ^ 3 ~ - ~ 2.7036671 ~ \times ~ weight ^ 2 \\
+& + ~ 13.0452680 ~ \times ~ weight ~ + ~ 27.9253576 \\
+\\
+where: & \\
+\\
+weight & ~ = ~ \text{weight of child} \\
+whz_\text{-3SD boys} & ~ = ~ \text{expected height for boys for a -3SD} \\
+whz_\text{-3SD girls} & ~ = ~ \text{expected height for girls for a -3SD}
+\end{aligned}\]
+
+
+\end{document}

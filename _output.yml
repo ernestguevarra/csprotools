@@ -1,0 +1,10 @@
+bookdown::pdf_document2:
+  includes:
+    in_header: preamble.tex
+  toc: false
+  number_sections: false
+  highlight: tango #pygment
+  keep_tex: yes
+  fig_caption: yes
+  latex_engine: xelatex
+  citation_package: natbib
