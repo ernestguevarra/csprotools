@@ -1,0 +1,110 @@
+// Create logic variables for each of the HAZ flags
+numeric hazLowerBoys;
+hazLowerBoys = 0.000000379386 * cage ^ 5 - 0.000069515524 * cage ^ 4 
+               + 0.004909805 * cage ^ 3 - 0.168908042 * cage ^ 2 
+               + 3.266127182 * cage + 39.95107423
+
+numeric hazUpperBoys;
+hazUpperBoys = 0.000000477257 * cage ^ 5 - 0.000080053304 * cage ^ 4 
+               + 0.005071378 * cage ^ 3 - 0.158048367 * cage ^ 2 
+               + 3.584968875 * cage + 63.13173807
+
+numeric hazLowerGirls;
+hazLowerGirls = 0.000000308918 * cage ^ 5 - 0.000056212972 * cage ^ 4
+                + 0.003932757 * cage ^ 3 - 0.135180355 * cage ^ 2
+                + 2.789665701 * cage + 39.23327346
+
+numeric hazUpperGirls;
+hazUpperGirs = 0.000000371919 * cage ^ 5 - 0.000065134503 * cage ^ 4
+               + 0.004358773 * cage ^ 3 - 0.145396571 * cage ^ 2
+               + 3.553078292 * cage + 62.01230832
+               
+// Add logic to flag height measurements - boys
+if csex <> 1 and height > hazUpperBoys or height < hazLowerBoys then
+  warning("Height measurement beyond expected value for child's age and sex",
+          height)
+          select("Repeat height measurement", height,
+                 "Ignore warning", continue);
+endif;
+
+// Add logic to flag height measurements - girls
+if csex <> 2 and height > hazUpperGirls or height < hazLowerGirls then
+  warning("Height measurement beyond expected value for child's age and sex",
+          height)
+          select("Repeat height measurement", height,
+                 "Ignore warning", continue);
+endif;
+
+// Create logic variables for each of the WAZ flags
+numeric wazLowerBoys;
+wazLowerBoys = 0.000000095420 * cage ^ 5 - 0.00001662831 * cage ^ 4 
+               + 0.001091416 * cage ^ 3 - 0.033880085 * cage ^ 2 
+               + 0.562601613 * cage + 1.139474257
+
+numeric wazUpperBoys;
+wazUpperBoys = 0.000000234816 * age ^ 5 - 0.000039531734 * age ^ 4
+               + 0.002496579 * age ^ 3 - 0.072781678 * age ^ 2
+               + 1.351053186 * age + 6.972621013
+
+numeric wazLowerGirls;
+wazLowerGirls = 0.000000083218 * age ^ 5 - 0.000013843176 * age ^ 4
+                + 0.000861019 * age ^ 3 - 0.025646557 * age ^ 2
+                + 0.450277222 * age + 1.111128346
+
+numeric wazUpperGirls;
+wazUpperGirls = 0.000000197736 * age ^ 5 - 0.000035478810 * age ^ 4
+               + 0.002404164 * age ^ 3 - 0.074112047 * age ^ 2
+               + 1.434496211 * age + 6.482817802
+               
+// Add logic to flag weight measurements - boys
+if csex <> 1 and weight > wazUpperBoys or weight < wazLowerBoys then
+  warning("Weight measurement beyond expected value for child's age and sex",
+          weight)
+          select("Repeat weight measurement", weight,
+                 "Ignore warning", continue);
+endif;
+
+// Add logic to flag weight measurements - girls
+if csex <> 2 and weight > wazUpperGirls or weight < wazLowerGirls then
+  warning("Weight measurement beyond expected value for child's age and sex",
+          weight)
+          select("Repeat weight measurement", weight,
+                 "Ignore warning", continue);
+endif;
+
+// Create logic variables for each of the WAZ flags
+numeric whzLowerBoys;
+whzLowerBoys = 0.002568778 * weight ^ 5 - 0.087078285 * weight ^ 4
+               + 1.083870039 * weight ^ 3 - 6.017158294 * weight ^ 2
+               + 20.69094143 * weight + 24.23997191
+
+numeric whzUpperBoys;
+whzUpperBoys = 0.000039423 * weight ^ 5 - 0.003300406 * weight ^ 4
+               + 0.100344392 * weight ^ 3 - 1.359686971 * weight ^ 2
+               + 10.87955385 * weight + 18.21716746
+
+numeric whzLowerGirls;
+whzLowerGirls = 0.001848563 * weight ^ 5 - 0.0606399 * weight ^ 4
+                + 0.7185497 * weight ^ 3 - 3.7764632 * weight ^ 2
+                + 15.4720170 * weight + 28.0948931
+
+numeric whzUpperGirls;
+whzUpperGirls = 0.00002434 * weight ^ 5 - 0.00197858 * weight ^ 4
+                + 0.05716011 * weight ^ 3 - 0.71815707 * weight ^ 2
+                + 6.61322135 * weight + 27.77925292
+               
+// Add logic to flag height measurements - boys
+if csex <> 1 and height > whzUpperBoys or height < whzLowerBoys then
+  warning("Height measurement beyond expected value for child's weight and sex",
+          height)
+          select("Repeat height measurement", height,
+                 "Ignore warning", continue);
+endif;
+
+// Add logic to flag height measurements - girls
+if csex <> 2 and height > whzUpperGirls or height < whzLowerGirls then
+  warning("Height measurement beyond expected value for child's age and sex",
+          height)
+          select("Repeat height measurement", height,
+                 "Ignore warning", continue);
+endif;
