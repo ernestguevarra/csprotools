@@ -20,7 +20,7 @@ hazUpperGirs = 0.000000371919 * cage ^ 5 - 0.000065134503 * cage ^ 4
                + 3.553078292 * cage + 62.01230832
                
 // Add logic to flag height measurements - boys
-if csex <> 1 and height > hazUpperBoys or height < hazLowerBoys then
+if csex = 1 and height > hazUpperBoys or height < hazLowerBoys then
   warning("Height measurement beyond expected value for child's age and sex",
           height)
           select("Repeat height measurement", height,
@@ -28,7 +28,7 @@ if csex <> 1 and height > hazUpperBoys or height < hazLowerBoys then
 endif;
 
 // Add logic to flag height measurements - girls
-if csex <> 2 and height > hazUpperGirls or height < hazLowerGirls then
+if csex = 2 and height > hazUpperGirls or height < hazLowerGirls then
   warning("Height measurement beyond expected value for child's age and sex",
           height)
           select("Repeat height measurement", height,
@@ -57,7 +57,7 @@ wazUpperGirls = 0.000000197736 * age ^ 5 - 0.000035478810 * age ^ 4
                + 1.434496211 * age + 6.482817802
                
 // Add logic to flag weight measurements - boys
-if csex <> 1 and weight > wazUpperBoys or weight < wazLowerBoys then
+if csex = 1 and weight > wazUpperBoys or weight < wazLowerBoys then
   warning("Weight measurement beyond expected value for child's age and sex",
           weight)
           select("Repeat weight measurement", weight,
@@ -65,7 +65,7 @@ if csex <> 1 and weight > wazUpperBoys or weight < wazLowerBoys then
 endif;
 
 // Add logic to flag weight measurements - girls
-if csex <> 2 and weight > wazUpperGirls or weight < wazLowerGirls then
+if csex = 2 and weight > wazUpperGirls or weight < wazLowerGirls then
   warning("Weight measurement beyond expected value for child's age and sex",
           weight)
           select("Repeat weight measurement", weight,
@@ -94,7 +94,7 @@ whzUpperGirls = 0.00002434 * weight ^ 5 - 0.00197858 * weight ^ 4
                 + 6.61322135 * weight + 27.77925292
                
 // Add logic to flag height measurements - boys
-if csex <> 1 and height > whzUpperBoys or height < whzLowerBoys then
+if csex = 1 and height > whzUpperBoys or height < whzLowerBoys then
   warning("Height measurement beyond expected value for child's weight and sex",
           height)
           select("Repeat height measurement", height,
@@ -102,7 +102,7 @@ if csex <> 1 and height > whzUpperBoys or height < whzLowerBoys then
 endif;
 
 // Add logic to flag height measurements - girls
-if csex <> 2 and height > whzUpperGirls or height < whzLowerGirls then
+if csex = 2 and height > whzUpperGirls or height < whzLowerGirls then
   warning("Height measurement beyond expected value for child's age and sex",
           height)
           select("Repeat height measurement", height,
